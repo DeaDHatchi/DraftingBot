@@ -66,34 +66,37 @@ class Drafting:
         with open(r'database\draft.json', 'w') as draftdata:
             draftdata.write(json.dumps(self.draft))
 
+    def selection(self, side, type):
+        return int(input('Select a hero for {} to {} by id: '.format(side, type)))
+
     def lets_draft(self):
         if self.starting == 'Radiant':
             for choice in self._order:
                 if choice == 1:
                     # Radiant Pick
                     print('Radiant Pick')
-                    selection = int(input('Select a hero for Radiant to Pick by id: '))
+                    selection = self.selection('Radiant', 'Pick')
                     self.game.radiant.add_pick(self.heroes.heroes[selection])
                     self.game.update_picks()
                     print('Radiant Drafted {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 2:
                     # Dire Pick
                     print('Dire Pick')
-                    selection = int(input('Select a hero for Dire to Pick by id: '))
+                    selection = self.selection('Dire', 'Pick')
                     self.game.dire.add_pick(self.heroes.heroes[selection])
                     self.game.update_picks()
                     print('Dire Drafted {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 10:
                     # Radiant Ban
                     print('Radiant Ban')
-                    selection = int(input('Select a hero for Radiant to Ban by id: '))
+                    selection = self.selection('Radiant', 'Ban')
                     self.game.radiant.add_ban(self.heroes.heroes[selection])
                     self.game.update_bans()
                     print('Radiant Banned {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 20:
                     # Dire Ban
                     print('Dire Ban')
-                    selection = int(input('Select a hero for Dire to Ban by id: '))
+                    selection = self.selection('Dire', 'Ban')
                     self.game.dire.add_ban(self.heroes.heroes[selection])
                     self.game.update_bans()
                     print('Dire Banned {}\n'.format(self.heroes.heroes[selection]['localized_name']))
@@ -102,28 +105,28 @@ class Drafting:
                 if choice == 1:
                     # Dire Pick
                     print('Dire Pick')
-                    selection = int(input('Select a hero for Dire to Pick by id: '))
+                    selection = self.selection('Dire', 'Pick')
                     self.game.dire.add_pick(self.heroes.heroes[selection])
                     self.game.update_picks()
                     print('Dire Drafted {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 2:
                     # Radiant Pick
                     print('Radiant Pick')
-                    selection = int(input('Select a hero for Radiant to Pick by id: '))
+                    selection = self.selection('Radiant', 'Pick')
                     self.game.radiant.add_pick(self.heroes.heroes[selection])
                     self.game.update_picks()
                     print('Radiant Drafted {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 10:
                     # Dire Ban
                     print('Dire Ban')
-                    selection = int(input('Select a hero for Dire to Ban by id: '))
+                    selection = self.selection('Dire', 'Ban')
                     self.game.dire.add_ban(self.heroes.heroes[selection])
                     self.game.update_bans()
                     print('Dire Banned {}\n'.format(self.heroes.heroes[selection]['localized_name']))
                 if choice == 20:
                     # Radiant Ban
                     print('Radiant Ban')
-                    selection = int(input('Select a hero for Radiant to Ban by id: '))
+                    selection = self.selection('Radiant', 'Ban')
                     self.game.radiant.add_ban(self.heroes.heroes[selection])
                     self.game.update_bans()
                     print('Radiant Banned {}\n'.format(self.heroes.heroes[selection]['localized_name']))
@@ -131,8 +134,12 @@ class Drafting:
         self.save_draft()
 
     def announce_draft(self):
-        print('Radiant Draft: {}'.format(self.game.radiant.picks))
-        print('Dire Draft: {}\n'.format(self.game.dire.picks))
+        print('Picks')
+        print('Radiant Draft: {}'.format(', '.join(self.game.radiant.picks_printout())))
+        print('Dire Draft: {}\n'.format(', '.join(self.game.dire.picks_printout())))
+        print('Bans')
+        print('Radiant Bans: {}'.format(', '.join(self.game.radiant.bans_printout())))
+        print('Dire Bans: {}\n'.format(', '.join(self.game.dire.bans_printout())))
 
 
 class Game:
@@ -163,6 +170,18 @@ class Side:
     def add_pick(self, hero):
         self._picks.append(hero)
 
+    def bans_printout(self):
+        printout_list = []
+        for ban in self._bans:
+            printout_list.append(ban['localized_name'])
+        return printout_list
+
+    def picks_printout(self):
+        printout_list = []
+        for pick in self._picks:
+            printout_list.append(pick['localized_name'])
+        return printout_list
+
     @property
     def bans(self):
         return self._bans
@@ -175,7 +194,8 @@ class Side:
 class Heroes:
 
     _heroes = {}
-    _sorted_heroes = {}
+    _sorted_heroes_by_id = {}
+    _sorted_heroes_by_name = {}
 
     def __init__(self):
         self.load_heroes()
@@ -193,11 +213,17 @@ class Heroes:
         sorted_heroes = {}
         for hero in self._heroes:
             sorted_heroes[hero['id']] = hero
-        self._sorted_heroes = sorted_heroes
+        self._sorted_heroes_by_id = sorted_heroes
+
+    def sort_heroes_by_name(self):
+        sorted_heroes = {}
+        for hero in self._heroes:
+            sorted_heroes[hero['name']] = hero
+        self._sorted_heroes_by_name = sorted_heroes
 
     @property
     def heroes(self):
-        return self._sorted_heroes
+        return self._sorted_heroes_by_id
 
 
 if __name__ == '__main__':
