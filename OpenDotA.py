@@ -1,24 +1,48 @@
 import requests
 import json
+from urls import Urls, Players
 from Main import Heroes
 
 API_KEY = '8467cd42-abd7-4189-a4c0-1b65eca157d'
-Hatchi = '74427895'
-base_url = 'https://api.opendota.com/api'
 heroes = Heroes()
 
-response = requests.get(url='{}/players/{}?{}'.format(base_url, Hatchi, API_KEY))
+Hatchi = '74427895'
+neph = '285975878'
+firetoad = '120572176'
+sage = '31200766'
+pat = '85363222'
 
-Hatchi_Profile = json.loads(response.text)
 
-response = requests.get(url='{}/players/{}/recentMatches?{}'.format(base_url, Hatchi, API_KEY))
-recent_matches = json.loads(response.text)
+class OpenDotA:
+    def __init__(self, API_KEY):
+        self.api_key = API_KEY
+        self.urls = Urls(self.api_key)
+        self.players = Players(self.api_key)
 
-response = requests.get(url='{}/heroes/8/matchups?{}'.format(base_url, API_KEY))
-jugg_matchups = json.loads(response.text)
+    def get(self, url):
+        return json.loads(self.response(url).text)
 
-for hero in jugg_matchups:
-    print('Hero: {} - Winrate: {}'.format(heroes.heroes[hero['hero_id']]['localized_name'], hero['wins'] / hero['games_played']))
+    def response(self, url):
+        return requests.get(url)
 
+opendota = OpenDotA(API_KEY)
+
+hatchi_profile = opendota.get(opendota.players.account_id(Hatchi))
+
+hatchi_recent_matches = opendota.get(opendota.players.recentMatches(Hatchi))
+
+hatchi_matches = opendota.get(opendota.players.matches(Hatchi))
+
+hatchi_peers = opendota.get(opendota.players.peers(Hatchi))
+
+stats = opendota.get(opendota.urls.heroStats)
+
+for hero in stats:
+    hero['pro_winrate'] = hero['pro_win'] / hero['pro_pick']
+
+highest_winrate = sorted(stats, key=lambda x: x['pro_winrate'], reverse=True)
+
+for hero in highest_winrate:
+    print('Hero: {} - Winrate - {}'.format(hero['localized_name'], hero['pro_win'] / hero['pro_pick']))
 
 print('debugline')
