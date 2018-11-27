@@ -22,6 +22,29 @@ class Main:
             self.exit()
 
 
+class Position:
+
+    _roles = {1: 'Carry',
+              2: 'Mid',
+              3: 'Offlane',
+              4: 'Flex',
+              5: 'Support'}
+
+    def __init__(self, id):
+        self.id = id
+        self.role = self._roles[self.id]
+
+
+class Bot:
+
+    _default_order = [5, 4, 3, 1, 2]
+    _offlane_priority_order = [5, 1, 4, 3, 2]
+    _safelane_priority_order = [4, 3, 5, 2, 1]
+
+    def __init__(self):
+        self.positions = [1, 2, 3, 4, 5]
+
+
 class Drafting:
 
     _order = [10, 20, 10, 20, 10, 20, 1, 2, 2, 1, 10, 20, 10, 20, 2, 1, 2, 1, 20, 10, 1, 2]
