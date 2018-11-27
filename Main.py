@@ -40,6 +40,7 @@ class Bot:
     _default_order = [5, 4, 3, 1, 2]
     _offlane_priority_order = [5, 1, 4, 3, 2]
     _safelane_priority_order = [4, 3, 5, 2, 1]
+    _early_cores_order = [3, 1, 2, 5, 4]
 
     def __init__(self):
         self.positions = [1, 2, 3, 4, 5]
