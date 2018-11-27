@@ -200,6 +200,7 @@ class Heroes:
     def __init__(self):
         self.load_heroes()
         self.sort_heroes_by_id()
+        self.sort_heroes_by_name()
 
     def load_heroes(self):
         with open(r'database/heroes.json', 'r') as herodata:
