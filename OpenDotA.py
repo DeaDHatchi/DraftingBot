@@ -28,6 +28,10 @@ class OpenDotA:
 opendota = OpenDotA(API_KEY)
 
 hatchi_profile = opendota.get(opendota.players.account_id(Hatchi))
+neph_profile = opendota.get(opendota.players.account_id(neph))
+firetoad_profile = opendota.get(opendota.players.account_id(firetoad))
+sage_profile = opendota.get(opendota.players.account_id(sage))
+pat_profile = opendota.get(opendota.players.account_id(pat))
 
 hatchi_recent_matches = opendota.get(opendota.players.recentMatches(Hatchi))
 
