@@ -39,3 +39,6 @@ class Players(Urls):
 
     def counts(self, account_id):
         return f'{self.account_id(account_id)}/heroes'
+
+    def rankings(self, account_id):
+        return f'{self.account_id(account_id)}/rankings'

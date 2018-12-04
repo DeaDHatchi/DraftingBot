@@ -25,28 +25,19 @@ class OpenDotA:
     def response(self, url):
         return requests.get(url)
 
+    def getRanking(self, steamid):
+        return self.get(self.players.rankings(steamid))
+
+    def getRankings(self, steamids):
+        returndict = {}
+        for steamid in steamids:
+            returndict[steamid] = self.getRanking(steamid)
+        return returndict
+
+
+
 opendota = OpenDotA(API_KEY)
 
-hatchi_profile = opendota.get(opendota.players.account_id(Hatchi))
-neph_profile = opendota.get(opendota.players.account_id(neph))
-firetoad_profile = opendota.get(opendota.players.account_id(firetoad))
-sage_profile = opendota.get(opendota.players.account_id(sage))
-pat_profile = opendota.get(opendota.players.account_id(pat))
-
-hatchi_recent_matches = opendota.get(opendota.players.recentMatches(Hatchi))
-
-hatchi_matches = opendota.get(opendota.players.matches(Hatchi))
-
-hatchi_peers = opendota.get(opendota.players.peers(Hatchi))
-
-stats = opendota.get(opendota.urls.heroStats)
-
-for hero in stats:
-    hero['pro_winrate'] = hero['pro_win'] / hero['pro_pick']
-
-highest_winrate = sorted(stats, key=lambda x: x['pro_winrate'], reverse=True)
-
-for hero in highest_winrate:
-    print('Hero: {} - Winrate - {}'.format(hero['localized_name'], hero['pro_win'] / hero['pro_pick']))
+x = opendota.getRankings([Hatchi, sage, neph, firetoad, pat])
 
 print('debugline')
