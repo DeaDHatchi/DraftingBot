@@ -38,7 +38,19 @@ class Players(Urls):
         return f'{self.account_id(account_id)}/peers'
 
     def counts(self, account_id):
-        return f'{self.account_id(account_id)}/heroes'
+        return f'{self.account_id(account_id)}/counts'
+
+    def histograms(self, account_id):
+        return f'{self.account_id(account_id)}/histograms'
+
+    def wardmap(self, account_id):
+        return f'{self.account_id(account_id)}/wardmap'
+
+    def wordcloud(self, account_id):
+        return f'{self.account_id(account_id)}/wordcloud'
+
+    def ratings(self, account_id):
+        return f'{self.account_id(account_id)}/ratings'
 
     def rankings(self, account_id):
         return f'{self.account_id(account_id)}/rankings'

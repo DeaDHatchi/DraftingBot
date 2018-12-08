@@ -13,6 +13,24 @@ sage = '31200766'
 pat = '85363222'
 
 
+class Player:
+    def __init__(self, steamid, opendota):
+        self.steamid = steamid
+        self.opendota = opendota
+
+    @property
+    def recentMatches(self):
+        return self.opendota.getRecentMatches(self.steamid)
+
+    @property
+    def matches(self):
+        return self.opendota.getMatches(self.steamid)
+
+    @property
+    def rankings(self):
+        return self.opendota.getRanking(self.steamid)
+
+
 class OpenDotA:
     def __init__(self, API_KEY):
         self.api_key = API_KEY
@@ -25,6 +43,15 @@ class OpenDotA:
     def response(self, url):
         return requests.get(url)
 
+    def getMatches(self, steamid):
+        return self.get(self.players.matches(steamid))
+
+    def getRecentMatches(self, steamid):
+        return self.get(self.players.recentMatches(steamid))
+
+    def getHeroesPool(self, steamid):
+        return self.get(self.players.heroes(steamid))
+
     def getRanking(self, steamid):
         return self.get(self.players.rankings(steamid))
 
@@ -35,9 +62,43 @@ class OpenDotA:
         return returndict
 
 
+class Scouting:
+    def __init__(self, opendota):
+        self.opendota = opendota
+        self.positions = {"1": None,
+                          "2": None,
+                          "3": None,
+                          "4": None,
+                          "5": None}
+
+    def getRecentHeroesPool(self, steamid):
+        pool = {}
+        matches = self.opendota.getRecentMatches(steamid)
+        for match in matches:
+            if match['hero_id'] in pool:
+                pool[match['hero_id']] += 1
+            else:
+                pool[match['hero_id']] = 1
+        return pool
+
+    def getHeroesPool(self, steamid):
+        return self.opendota.getHeroesPool(steamid)
+
+    def calcMostLikelyPositions(self, steamids):
+        mostlikelypositions = {}
+        for steamid in steamids:
+            mostlikelypositions[steamid] = self.getRecentHeroesPool(steamid)
+        return mostlikelypositions
+
+    def mostLikelyPositions(self, steamids):
+        return self.calcMostLikelyPositions(steamids)
+
+
+players_list = [Hatchi, sage, neph, firetoad, pat]
 
 opendota = OpenDotA(API_KEY)
+scouting = Scouting(opendota)
 
-x = opendota.getRankings([Hatchi, sage, neph, firetoad, pat])
+test1 = scouting.calcMostLikelyPositions(players_list)
 
 print('debugline')
