@@ -11,7 +11,7 @@ class Urls:
         return f'{self.base_url}/heroStats'
 
 
-class Players(Urls):
+class OpenDotAAccount(Urls):
     def __init__(self, API_KEY):
         super().__init__(API_KEY)
 
@@ -25,7 +25,7 @@ class Players(Urls):
     def wl(self, account_id):
         return f'{self.account_id(account_id)}/wl'
 
-    def recentMatches(self, account_id):
+    def recent_matches(self, account_id):
         return f'{self.account_id(account_id)}/recentMatches'
 
     def matches(self, account_id):
