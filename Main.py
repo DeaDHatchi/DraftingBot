@@ -1,4 +1,5 @@
 import json
+
 from Heroes import Heroes
 
 
@@ -24,20 +25,18 @@ class Main:
 
 
 class Position:
-
     _roles = {1: 'Carry',
               2: 'Mid',
               3: 'Offlane',
               4: 'Flex',
               5: 'Support'}
 
-    def __init__(self, id):
-        self.id = id
-        self.role = self._roles[self.id]
+    def __init__(self, ident):
+        self.ident = ident
+        self.role = self._roles[self.ident]
 
 
 class Bot:
-
     _default_order = [5, 4, 3, 1, 2]
     _off_lane_priority_order = [5, 1, 2, 4, 3]
     _safe_lane_priority_order = [4, 3, 2, 5, 1]
@@ -49,7 +48,6 @@ class Bot:
 
 
 class Drafting:
-
     _order = [10, 20, 10, 20, 10, 20, 1, 2, 2, 1, 10, 20, 10, 20, 2, 1, 2, 1, 20, 10, 1, 2]
 
     def __init__(self, starting_side='Radiant'):
@@ -65,8 +63,8 @@ class Drafting:
                          'bans': self.game.dire.bans}}
 
     def save_draft(self):
-        with open(r'database\draft.json', 'w') as draftdata:
-            draftdata.write(json.dumps(self.draft))
+        with open(r'database\draft.json', 'w') as draft_data:
+            draft_data.write(json.dumps(self.draft))
 
     @staticmethod
     def selection(side, pick_or_ban):
@@ -97,33 +95,26 @@ class Drafting:
         print('Dire Banned {}\n'.format(self.heroes.heroes[selection]['localized_name']))
 
     def lets_draft(self):
+        # TODO: I could probably clean this up even more. Don't quite know how yet?
         if self.starting == 'Radiant':
             for choice in self._order:
-                if choice == 1:
-                    # Radiant Pick
+                if choice == 1:  # Radiant Pick
                     self.radiant_pick()
-                if choice == 2:
-                    # Dire Pick
+                if choice == 2:  # Dire Pick
                     self.dire_pick()
-                if choice == 10:
-                    # Radiant Ban
+                if choice == 10:  # Radiant Ban
                     self.radiant_ban()
-                if choice == 20:
-                    # Dire Ban
+                if choice == 20:  # Dire Ban
                     self.dire_ban()
         else:
             for choice in self._order:
-                if choice == 1:
-                    # Dire Pick
+                if choice == 1:  # Dire Pick
                     self.dire_pick()
-                if choice == 2:
-                    # Radiant Pick
+                if choice == 2:  # Radiant Pick
                     self.radiant_pick()
-                if choice == 10:
-                    # Dire Ban
+                if choice == 10:  # Dire Ban
                     self.dire_ban()
-                if choice == 20:
-                    # Radiant Ban
+                if choice == 20:  # Radiant Ban
                     self.radiant_ban()
         self.announce_draft()
         self.save_draft()
@@ -173,4 +164,3 @@ if __name__ == '__main__':
     main = Main()
     main.run()
     print('debugline')
-

@@ -84,7 +84,8 @@ class OpenDotA:
         """
         return json.loads(self.response(url).text)
 
-    def response(self, url):
+    @staticmethod
+    def response(url):
         """
         Return a Requests Object from the URL Response
         :param url: String
@@ -174,6 +175,7 @@ if __name__ == '__main__':
     opendota = OpenDotA(API_KEY)
     scouting = Scouting(opendota)
 
+    # TODO: At some point I want to make this threaded for multiple API calls running at once.
     for player in players_list:
         search_person = player
         account_id = scouting.get_account_id(search_person)
@@ -186,4 +188,3 @@ if __name__ == '__main__':
         print(f'Scouting Report for {account_id["profile"]["personaname"]} - {search_person}')
         print(f'Best Hero: {best_hero["localized_name"]} - {best_hero["score"]}')
         print(f'Most Recent Heroes: {recent_heroes}\n')
-
