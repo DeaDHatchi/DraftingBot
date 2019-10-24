@@ -1,8 +1,7 @@
 import json
 
 import requests
-
-from Drafting.Urls import OpenDotAAccount
+from Urls import OpenDotAAccount
 
 
 class Player:

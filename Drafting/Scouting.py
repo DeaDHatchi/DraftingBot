@@ -1,5 +1,5 @@
-from Drafting.Heroes import Heroes
-from Drafting.OpenDotA import OpenDotA
+from Heroes import Heroes
+from OpenDotA import OpenDotA
 
 
 def load_api_key():
@@ -17,14 +17,17 @@ class Scouting:
                           "4": None,
                           "5": None}
 
+    def assign_localized_name(self, hero):
+        hero['localized_name'] = self.heroes.heroes[int(hero['hero_id'])]['localized_name']
+        return hero
+
     def get_account_id(self, steam_id):
         return self.open_dota.get_account_id(steam_id)
 
     def get_recent_heroes_pool(self, steam_id):
         # TODO: I don't think I can clean this up anymore than it already is
         matches = self.get_recent_matches(steam_id)
-        return {self.heroes.heroes[match['hero_id']]['localized_name']:
-                    len(list(filter(lambda hero: hero['hero_id'] == match['hero_id'], matches))) for match in matches}
+        return {self.heroes.heroes[match['hero_id']]['localized_name']: len(list(filter(lambda hero: hero['hero_id'] == match['hero_id'], matches))) for match in matches}
 
     def get_recent_matches(self, steam_id):
         return self.open_dota.get_recent_matches(steam_id)
@@ -42,10 +45,7 @@ class Scouting:
         return self.open_dota.get_ranking(steam_id)
 
     def get_best_hero(self, steam_id):
-        # TODO: How can we clean this up?
-        best = self.get_best_hero_by_score(steam_id)
-        best['localized_name'] = self.heroes.sort_heroes_by_id[best['hero_id']]['localized_name']
-        return best
+        return self.assign_localized_name(self.get_best_hero_by_score(steam_id))
 
     def get_best_hero_by_score(self, steam_id):
         return max(self.get_ranking(steam_id), key=lambda k: k['score'])
@@ -55,6 +55,9 @@ class Scouting:
 
     def get_most_likely_heroes(self, steam_id):
         return list(set([hero['hero_id'] for hero in self.get_recent_heroes_pool(steam_id)]))
+
+    def get_most_played_hero(self, steam_id):
+        return self.assign_localized_name(max(self.open_dota.get_heroes_pool(steam_id), key=lambda k: k['games']))
 
     def get_most_likely_lane(self, steam_id):
         # TODO: Finish this
@@ -88,7 +91,10 @@ if __name__ == '__main__':
         ranking = scouting.get_ranking(search_person)
         best_hero = scouting.get_best_hero(search_person)
         rating = scouting.get_rating(search_person)
+        most_played = scouting.get_most_played_hero(search_person)
 
-        print(f'Scouting Report for {account_id["profile"]["personaname"]} - {search_person}')
+        print(f'Scouting Report for {account_id["profile"]["personaname"]} - Steam ID: {search_person}')
         print(f'Best Hero: {best_hero["localized_name"]} - {best_hero["score"]}')
-        print(f'Most Recent Heroes: {recent_heroes}\n')
+        print(f'Most Recent Heroes: {recent_heroes}')
+        print(f'Most Played Hero: {most_played["localized_name"]} - Games: {most_played["games"]}')
+        print(f"")

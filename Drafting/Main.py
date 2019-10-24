@@ -1,4 +1,4 @@
-from Drafting.Drafting import Drafting
+from Drafting import Drafting
 
 
 class Main:

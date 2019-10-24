@@ -1,7 +1,7 @@
 import json
 
-from Drafting.Game import Game
-from Drafting.Heroes import Heroes
+from Game import Game
+from Heroes import Heroes
 
 
 class Drafting:
@@ -20,7 +20,7 @@ class Drafting:
                          'bans': self.game.dire.bans}}
 
     def save_draft(self):
-        with open(r'database\draft.json', 'w') as draft_data:
+        with open(r'.\database\draft.json', 'w') as draft_data:
             draft_data.write(json.dumps(self.draft))
 
     @staticmethod
