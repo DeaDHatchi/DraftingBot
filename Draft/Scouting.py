@@ -1,5 +1,5 @@
-from Heroes import Heroes
-from OpenDotA import OpenDotA
+from Draft.Heroes import Heroes
+from Draft.OpenDotA import OpenDotA
 
 
 def load_api_key():

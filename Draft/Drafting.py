@@ -1,7 +1,7 @@
 import json
 
-from Game import Game
-from Heroes import Heroes
+from Draft.Game import Game
+from Draft.Heroes import Heroes
 
 
 class Drafting:
