@@ -1,50 +1,7 @@
 import json
 
-from Heroes import Heroes
-
-
-class Main:
-    def __init__(self):
-        self.state = True
-
-    def exit(self):
-        self.state = False
-
-    def run(self):
-        while self.state:
-            self.lets_draft()
-
-    def lets_draft(self):
-        draft = Drafting()
-        draft.lets_draft()
-        choice = input('Do you want to draft again? (Y/N): ')
-        if choice.upper() == 'Y':
-            self.lets_draft()
-        else:
-            self.exit()
-
-
-class Position:
-    _roles = {1: 'Carry',
-              2: 'Mid',
-              3: 'Offlane',
-              4: 'Flex',
-              5: 'Support'}
-
-    def __init__(self, ident):
-        self.ident = ident
-        self.role = self._roles[self.ident]
-
-
-class Bot:
-    _default_order = [5, 4, 3, 1, 2]
-    _off_lane_priority_order = [5, 1, 2, 4, 3]
-    _safe_lane_priority_order = [4, 3, 2, 5, 1]
-    _early_cores_order = [1, 2, 3, 4, 5]
-    _mid_lane_priority_order = [3, 4, 5, 1, 2]
-
-    def __init__(self):
-        self.positions = [1, 2, 3, 4, 5]
+from Drafting.Game import Game
+from Drafting.Heroes import Heroes
 
 
 class Drafting:
@@ -126,41 +83,3 @@ class Drafting:
         print('Bans')
         print('Radiant Bans: {}'.format(', '.join(self.game.radiant.bans_printout())))
         print('Dire Bans: {}\n'.format(', '.join(self.game.dire.bans_printout())))
-
-
-class Game:
-    def __init__(self):
-        self.radiant = Side()
-        self.dire = Side()
-
-    @property
-    def bans(self):
-        return self.radiant.bans + self.dire.bans
-
-    @property
-    def picks(self):
-        return self.radiant.picks + self.dire.picks
-
-
-class Side:
-    def __init__(self):
-        self.bans = []
-        self.picks = []
-
-    def add_ban(self, hero):
-        self.bans.append(hero)
-
-    def add_pick(self, hero):
-        self.picks.append(hero)
-
-    def bans_printout(self):
-        return [ban['localized_name'] for ban in self.bans]
-
-    def picks_printout(self):
-        return [pick['localized_name'] for pick in self.picks]
-
-
-if __name__ == '__main__':
-    main = Main()
-    main.run()
-    print('debugline')

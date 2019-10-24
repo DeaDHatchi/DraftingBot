@@ -5,12 +5,12 @@ class Heroes:
 
     @staticmethod
     def load_heroes():
-        with open(r'database/heroes.json', 'r') as herodata:
-            return json.loads(herodata.read())
+        with open(r'database/heroes.json', 'r') as hero_data:
+            return json.loads(hero_data.read())
 
     def save_heroes(self):
-        with open(r'database/heroes.json', 'w') as herodata:
-            herodata.write(json.dumps(self._heroes))
+        with open(r'database/heroes.json', 'w') as hero_data:
+            hero_data.write(json.dumps(self._heroes))
 
     @property
     def _heroes(self):
