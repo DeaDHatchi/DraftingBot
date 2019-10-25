@@ -20,7 +20,7 @@ class Drafting:
                          'bans': self.game.dire.bans}}
 
     def save_draft(self):
-        with open(r'.\database\draft.json', 'w') as draft_data:
+        with open(r'database\draft.json', 'w') as draft_data:
             draft_data.write(json.dumps(self.draft))
 
     @staticmethod
