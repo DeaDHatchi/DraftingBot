@@ -12,11 +12,15 @@ class Main:
         while self.state:
             self.lets_draft()
 
+    @staticmethod
+    def choose():
+        choice = input('Do you want to draft again? (Y/N): ')
+        return choice.upper().strip() == 'Y' or choice.upper().strip() == 'YES'
+
     def lets_draft(self):
         draft = Drafting()
         draft.lets_draft()
-        choice = input('Do you want to draft again? (Y/N): ')
-        if choice.upper().strip() == 'Y' or choice.upper().strip() == 'YES':
+        if self.choose():
             self.lets_draft()
         else:
             self.exit()
